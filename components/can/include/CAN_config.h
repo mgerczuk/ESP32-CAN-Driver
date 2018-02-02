@@ -31,29 +31,33 @@
 
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
+#include "freertos/task.h"
 #include "driver/gpio.h"
-
+#include "freertos/semphr.h"
 
 /** \brief CAN Node Bus speed */
-typedef enum  {
-	CAN_SPEED_100KBPS=100, 				/**< \brief CAN Node runs at 100kBit/s. */
-	CAN_SPEED_125KBPS=125, 				/**< \brief CAN Node runs at 125kBit/s. */
-	CAN_SPEED_250KBPS=250, 				/**< \brief CAN Node runs at 250kBit/s. */
-	CAN_SPEED_500KBPS=500, 				/**< \brief CAN Node runs at 500kBit/s. */
-	CAN_SPEED_800KBPS=800, 				/**< \brief CAN Node runs at 800kBit/s. */
-	CAN_SPEED_1000KBPS=1000				/**< \brief CAN Node runs at 1000kBit/s. */
-}CAN_speed_t;
+typedef enum {
+	CAN_SPEED_100KBPS = 100,  /**< \brief CAN Node runs at 100kBit/s. */
+	CAN_SPEED_125KBPS = 125,  /**< \brief CAN Node runs at 125kBit/s. */
+	CAN_SPEED_200KBPS = 200,  /**< \brief CAN Node runs at 250kBit/s. */
+	CAN_SPEED_250KBPS = 250,  /**< \brief CAN Node runs at 250kBit/s. */
+	CAN_SPEED_500KBPS = 500,  /**< \brief CAN Node runs at 500kBit/s. */
+	CAN_SPEED_800KBPS = 800,  /**< \brief CAN Node runs at 800kBit/s. */
+	CAN_SPEED_1000KBPS = 1000 /**< \brief CAN Node runs at 1000kBit/s. */
+} CAN_speed_t;
 
 /** \brief CAN configuration structure */
-typedef struct  {
-	CAN_speed_t			speed;			/**< \brief CAN speed. */
-    gpio_num_t 			tx_pin_id;		/**< \brief TX pin. */
-    gpio_num_t 			rx_pin_id;		/**< \brief RX pin. */
-    QueueHandle_t 		rx_queue;		/**< \brief Handler to FreeRTOS RX queue. */
-}CAN_device_t;
+typedef struct {
+	CAN_speed_t speed;      /**< \brief CAN speed. */
+	gpio_num_t tx_pin_id;   /**< \brief TX pin. */
+	gpio_num_t rx_pin_id;   /**< \brief RX pin. */
+	QueueHandle_t rx_queue; /**< \brief Handler to FreeRTOS RX queue. */
+	QueueHandle_t tx_queue; /**< \brief Handler to FreeRTOS TX queue. */
+	TaskHandle_t tx_handle; /**< \brief Handler to FreeRTOS TX task. */
+	TaskHandle_t rx_handle; /**< \brief Handler to FreeRTOS RX task. */
+} CAN_device_t;
 
 /** \brief CAN configuration reference */
 extern CAN_device_t CAN_cfg;
-
 
 #endif /* __DRIVERS_CAN_CFG_H__ */

@@ -39,6 +39,7 @@ choice ESP_CAN_SPEED
 	help
 		CAN_SPEED_100KBPS 		CAN Node runs at 100kBits.
 		CAN_SPEED_125KBPS 		CAN Node runs at 125kBits.
+		CAN_SPEED_200KBPS 		CAN Node runs at 200kBits.
 		CAN_SPEED_250KBPS 		CAN Node runs at 250kBits.
 		CAN_SPEED_500KBPS 		CAN Node runs at 500kBits.
 		CAN_SPEED_800KBPS 		CAN Node runs at 800kBits.
@@ -57,6 +58,11 @@ config CAN_SPEED_125KBPS
     bool "CAN SPEED 125KBPS"
     help
         Select this: CAN Node runs at 125kBits.
+
+config CAN_SPEED_200KBPS
+    bool "CAN SPEED 200KBPS"
+    help
+        Select this: CAN Node runs at 200kBits.
 
 config CAN_SPEED_250KBPS
     bool "CAN SPEED 250KBPS"
