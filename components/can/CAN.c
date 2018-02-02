@@ -254,17 +254,6 @@ int CAN_init() {
 	// Showtime. Release Reset Mode.
 	MODULE_CAN->MOD.B.RM = 0;
 
-	// SEND HELLO FRAME
-	CAN_frame_t frame;
-	frame.MsgID = 7;
-	frame.data.u8[0] = 1;
-	frame.data.u8[1] = 2;
-	frame.data.u8[2] = 3;
-	frame.data.u8[3] = 4;
-	frame.data.u8[4] = 5;
-	frame.FIR.B.DLC = 5;
-	CAN_write_frame(&frame);
-
 	return 0;
 }
 
