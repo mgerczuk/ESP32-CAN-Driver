@@ -117,6 +117,8 @@ static void CAN_read_frame_phy(BaseType_t *higherPriorityTaskWoken) {
 			__frame.data.u8[__byte_i] = MODULE_CAN->MBX_CTRL.FCTRL.TX_RX.EXT.data[__byte_i];
 	}
 
+	gettimeofday(&__frame.tv, NULL);
+
 	// send frame to input queue
 	xQueueSendToBackFromISR(CAN_cfg.rx_queue, &__frame, higherPriorityTaskWoken);
 
@@ -160,7 +162,7 @@ static int CAN_write_frame_phy(const CAN_frame_t *p_frame) {
 	return 0;
 }
 
-int CAN_init() {
+int CAN_init(bool listenOnly) {
 
 	// Time quantum
 	double __tq;
@@ -245,11 +247,17 @@ int CAN_init() {
 	// clear interrupt flags
 	(void) MODULE_CAN->IR.U;
 
+	// allocate the tx complete semaphore
+	sem_tx_complete = xSemaphoreCreateBinary();
+
 	// install CAN ISR
 	esp_intr_alloc(ETS_CAN_INTR_SOURCE, 0, CAN_isr, NULL, NULL);
 
-	// allocate the tx complete semaphore
-	sem_tx_complete = xSemaphoreCreateBinary();
+    if (listenOnly)
+    {
+        // listen only!
+        MODULE_CAN->MOD.B.LOM = 1;
+    }
 
 	// Showtime. Release Reset Mode.
 	MODULE_CAN->MOD.B.RM = 0;

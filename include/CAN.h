@@ -30,7 +30,12 @@
 #define __DRIVERS_CAN_H__
 
 #include <stdint.h>
+#include <sys/time.h>
 #include "CAN_config.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * \brief CAN frame type (standard/extended)
@@ -67,15 +72,18 @@ typedef struct {
 	union {
 		uint8_t u8[8];   /**< \brief Payload byte access*/
 		uint32_t u32[2]; /**< \brief Payload u32 access*/
+		uint64_t u64;    /**< \brief Payload u64 access*/
 	} data;
+	struct timeval tv;
 } CAN_frame_t;
 
 /**
  * \brief Initialize the CAN Module
  *
+ * \param	listenOnly true, if module should be listen-only
  * \return 0 CAN Module had been initialized
  */
-int CAN_init(void);
+int CAN_init(bool listenOnly);
 
 /**
  * \brief Send a can frame
@@ -91,5 +99,9 @@ int CAN_write_frame(const CAN_frame_t *p_frame);
  * \return 0 CAN Module was stopped
  */
 int CAN_stop(void);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
