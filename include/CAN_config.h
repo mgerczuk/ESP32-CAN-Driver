@@ -55,6 +55,7 @@ typedef struct {
 	QueueHandle_t tx_queue; /**< \brief Handler to FreeRTOS TX queue. */
 	TaskHandle_t tx_handle; /**< \brief Handler to FreeRTOS TX task. */
 	TaskHandle_t rx_handle; /**< \brief Handler to FreeRTOS RX task. */
+	bool listen_only;
 } CAN_device_t;
 
 /** \brief CAN configuration reference */

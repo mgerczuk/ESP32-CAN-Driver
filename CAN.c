@@ -33,7 +33,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/queue.h"
 
-#include "esp_intr.h"
+#include "esp_intr_alloc.h"
 #include "soc/dport_reg.h"
 #include <math.h>
 
@@ -69,7 +69,7 @@ static void CAN_isr(void *arg_p) {
 	                  | __CAN_IRQ_ARB_LOST         // 0x40
 	                  | __CAN_IRQ_BUS_ERR          // 0x80
 	                  )) != 0) {
-		xSemaphoreGive(sem_tx_complete);
+		xSemaphoreGiveFromISR(sem_tx_complete, &higherPriorityTaskWoken);
 	}
 
 	// check if any higher priority task has been woken by any handler
@@ -162,7 +162,7 @@ static int CAN_write_frame_phy(const CAN_frame_t *p_frame) {
 	return 0;
 }
 
-int CAN_init(bool listenOnly) {
+int CAN_init() {
 
 	// Time quantum
 	double __tq;
@@ -253,7 +253,7 @@ int CAN_init(bool listenOnly) {
 	// install CAN ISR
 	esp_intr_alloc(ETS_CAN_INTR_SOURCE, 0, CAN_isr, NULL, NULL);
 
-    if (listenOnly)
+    if (CAN_cfg.listen_only)
     {
         // listen only!
         MODULE_CAN->MOD.B.LOM = 1;
