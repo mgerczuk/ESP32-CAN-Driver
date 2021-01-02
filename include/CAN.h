@@ -74,7 +74,6 @@ typedef struct {
 		uint32_t u32[2]; /**< \brief Payload u32 access*/
 		uint64_t u64;    /**< \brief Payload u64 access*/
 	} data;
-	struct timeval tv;
 } CAN_frame_t;
 
 /**

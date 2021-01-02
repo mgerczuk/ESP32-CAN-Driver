@@ -117,8 +117,6 @@ static void CAN_read_frame_phy(BaseType_t *higherPriorityTaskWoken) {
 			__frame.data.u8[__byte_i] = MODULE_CAN->MBX_CTRL.FCTRL.TX_RX.EXT.data[__byte_i];
 	}
 
-	gettimeofday(&__frame.tv, NULL);
-
 	// send frame to input queue
 	xQueueSendToBackFromISR(CAN_cfg.rx_queue, &__frame, higherPriorityTaskWoken);
 
